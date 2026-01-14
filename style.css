@@ -1,34 +1,30 @@
 :root { --bg: #0d1117; --card: #161b22; --accent: #f59e0b; --text: #c9d1d9; --success: #238636; }
-body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 10px; }
-.seo-header { text-align: center; padding: 15px 0; }
-.seo-header h1 { color: var(--accent); margin: 0; font-size: 1.6rem; }
+body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+.seo-header h1 { color: var(--accent); margin: 10px 0; }
 
-.main-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-.card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 20px; width: 330px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; }
+.main-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; max-width: 1000px; }
+.card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 20px; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-.display { background: #010409; padding: 20px; border-radius: 8px; text-align: right; margin-bottom: 15px; }
-.current-operand { font-size: 2.2rem; color: #fff; min-height: 45px; }
-.previous-operand { font-size: 1rem; color: #8b949e; min-height: 20px; }
-
-.complex-input-group { display: flex; gap: 5px; margin-bottom: 15px; }
-.complex-input-group input { flex: 1; background: #0d1117; border: 1px solid #333; color: white; padding: 10px; border-radius: 5px; }
-.btn-solve { background: var(--success); color: white; border: none; padding: 0 10px; border-radius: 5px; cursor: pointer; }
+.display { background: #010409; padding: 20px; border-radius: 8px; text-align: right; margin-bottom: 15px; border: 1px solid #30363d; }
+.current-operand { font-size: 2.5rem; color: #fff; min-height: 50px; }
+.previous-operand { font-size: 1.1rem; color: #8b949e; }
 
 .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-button { padding: 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; background: #21262d; color: white; }
+button { padding: 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; background: #21262d; color: white; font-size: 1.1rem; }
 .btn-op { background: var(--accent); color: black; }
 .btn-eq { background: var(--success); }
 .btn-sci { background: #5865f2; }
+.btn-alt { background: #484f58; }
 .col-span-2 { grid-column: span 2; }
 
-#history-list { list-style: none; padding: 0; max-height: 100px; overflow-y: auto; font-size: 0.8rem; }
-.btn-clear-hist { width: 100%; background: #da3633; padding: 5px; font-size: 0.7rem; margin-top: 10px; }
+.complex-input-group { display: flex; gap: 5px; margin-bottom: 15px; }
+.complex-input-group input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 5px; }
 
-.btn-paytech { background: #2196F3; color: white; width: 100%; padding: 15px; font-weight: bold; margin-bottom: 10px; border-radius: 8px; }
-#promo-code-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #0d1117; color: white; border: 1px solid #333; text-align: center; border-radius: 5px; }
-.btn-activate { background: var(--accent); color: black; width: 100%; padding: 10px; font-weight: bold; border-radius: 5px; }
-.separator { margin: 15px 0; font-size: 0.7rem; color: #8b949e; text-align: center; font-weight: bold; }
-.premium-badge { background: var(--success); color: white; font-size: 0.6rem; padding: 3px 8px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
-.quiz-box { background: #010409; padding: 20px; border-radius: 10px; text-align: center; }
-#question { font-size: 2rem; color: var(--accent); margin-bottom: 10px; }
+.btn-paytech { background: #2196F3; color: white; width: 100%; padding: 15px; font-weight: bold; border-radius: 8px; }
+#promo-code-input { width: 100%; padding: 12px; margin: 10px 0; background: #0d1117; border: 1px solid #30363d; color: white; text-align: center; border-radius: 5px; box-sizing: border-box; }
+.btn-activate { background: var(--accent); color: black; width: 100%; padding: 12px; font-weight: bold; border-radius: 8px; }
+
 .hidden { display: none !important; }
+.premium-badge { background: var(--success); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 10px; display: inline-block; }
+.quiz-box { text-align: center; padding: 20px; background: #010409; border-radius: 10px; }
+#question { font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
