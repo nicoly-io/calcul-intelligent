@@ -1,16 +1,68 @@
 :root {
-    --bg: #0d1117; --card: #161b22; --accent: #5865f2;
-    --gold: #f59e0b; --success: #238636; --error: #da3633; --text: #c9d1d9;
+    --bg: #080a10;
+    --card: #121620;
+    --accent: #00d2ff;
+    --neon: #3a86ff;
+    --gold: #ffbe0b;
+    --success: #06d6a0;
+    --error: #ef476f;
+    --text: #ffffff;
 }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 10px; margin: 0; }
-.main-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 20px; }
-.card { background: var(--card); border: 1px solid #30363d; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.calc-screen { background: #010409; padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent); margin-bottom: 10px; }
-.history-box { font-size: 0.8rem; color: #8b949e; min-height: 45px; text-align: right; border-bottom: 1px solid #30363d; margin-bottom: 5px; overflow-y: auto; }
-.input-free { width: 100%; background: transparent; border: none; color: white; font-size: 1.4rem; text-align: right; outline: none; }
-.quiz-box { background: #010409; border: 2px solid var(--accent); border-radius: 15px; padding: 20px; text-align: center; }
-@keyframes win { 0% { transform: scale(1); } 50% { transform: scale(1.1); text-shadow: 0 0 15px var(--gold); } 100% { transform: scale(1); } }
-.win-anim { animation: win 0.5s ease-in-out; }
-button { padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; background: #21262d; color: white; }
-.btn-accent { background: var(--accent); }
-.btn-success { background: var(--success); }
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0; display: flex; justify-content: center;
+}
+
+.app-container { width: 100%; max-width: 480px; padding: 15px; display: flex; flex-direction: column; gap: 20px; }
+
+.card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    position: relative; overflow: hidden;
+}
+
+.neon-text { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+.display-area {
+    background: #000; border-radius: 15px; padding: 15px; margin-bottom: 15px;
+    border-left: 4px solid var(--accent);
+}
+
+.main-input {
+    width: 100%; background: transparent; border: none; color: white;
+    font-size: 1.5rem; outline: none; text-align: right;
+}
+
+.steps-area { font-size: 0.8rem; color: var(--accent); margin: 10px 0; }
+
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+button {
+    padding: 15px; border-radius: 12px; border: none; font-weight: bold;
+    background: #1e2433; color: white; cursor: pointer; transition: 0.2s;
+}
+
+button:active { transform: scale(0.9); }
+.btn-sci { background: #2d3446; color: var(--accent); font-size: 0.8rem; }
+.btn-op { background: var(--neon); }
+.btn-equal { background: var(--success); grid-column: span 1; }
+.btn-clear { color: var(--error); }
+
+/* Animations Victoire */
+@keyframes success-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px var(--success); }
+    100% { transform: scale(1); }
+}
+.win { animation: success-pop 0.6s ease-out; }
+
+.locked-overlay {
+    text-align: center; background: rgba(0,0,0,0.8); border-radius: 24px;
+    padding: 20px;
+}
