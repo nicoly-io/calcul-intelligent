@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Lien vers ton application sur GitHub
+Sitemap: https://nicoly-io.github.io/calcul-intelligent/sitemap.xml
