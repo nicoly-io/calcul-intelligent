@@ -1,158 +1,137 @@
-class ToumanyCalculator {
-    constructor() { this.clear(); }
-    clear() { this.cur = '0'; this.prev = ''; this.op = undefined; this.update(); }
-    delete() { this.cur = this.cur.toString().slice(0, -1) || '0'; this.update(); }
-    addNumber(n) { this.cur = (this.cur === '0') ? n : this.cur + n; this.update(); }
-    chooseOp(op) { if(this.cur==='')return; if(this.prev!=='')this.compute(); this.op=op; this.prev=this.cur; this.cur=''; this.update(); }
-    compute() {
-        let res; const p=parseFloat(this.prev), c=parseFloat(this.cur);
-        if(isNaN(p)||isNaN(c)) return;
-        switch(this.op){ case '+':res=p+c;break; case '-':res=p-c;break; case '*':res=p*c;break; case '/':res=p/c;break; default:return; }
-        this.cur=res; this.op=undefined; this.prev=''; this.update();
-    }
-    update() { document.getElementById('current-operand').innerText = this.cur; document.getElementById('previous-operand').innerText = this.op ? this.prev+this.op : ''; }
-}
-
-class EliteEducation {
+class NicolyApp {
     constructor() {
+        this.history = JSON.parse(localStorage.getItem('nic_history')) || [];
         this.score = parseInt(localStorage.getItem('nic_xp')) || 0;
         this.currentQ = {};
-        this.database = {
+        this.db = {
             maths: [
-                // CFEE (Niveau 1)
-                { q: "Périmètre d'un carré de côté 5m ?", a: "20", niv: "Facile" },
-                { q: "Surface d'un rectangle de 8m sur 4m ?", a: "32", niv: "Facile" },
-                { q: "Moitié de 150 ?", a: "75", niv: "Facile" },
-                { q: "Le triple de 25 ?", a: "75", niv: "Facile" },
-                { q: "Convertir 2kg en grammes", a: "2000", niv: "Facile" },
-                { q: "Prix de 5 cahiers à 125F l'un ?", a: "625", niv: "Facile" },
-                { q: "Combien de minutes dans 2h15 ?", a: "135", niv: "Facile" },
-                { q: "Complément à 100 de 37 ?", a: "63", niv: "Facile" },
-                // BFEM (Niveau 2)
-                { q: "Racine carrée de 169 ?", a: "13", niv: "Moyen" },
-                { q: "Résoudre : 3x = 27", a: "9", niv: "Moyen" },
-                { q: "Développer : (x+2)^2", a: "x^2+4x+4", niv: "Moyen" },
-                { q: "Calculer : 2/3 + 1/3", a: "1", niv: "Moyen" },
-                { q: "Valeur de Pi (2 chiffres après virgule) ?", a: "3.14", niv: "Moyen" },
-                { q: "Angle droit = combien de degrés ?", a: "90", niv: "Moyen" },
-                { q: "10% de 5000 ?", a: "500", niv: "Moyen" },
-                // BAC (Niveau 3)
-                { q: "Dérivée de x^2 ?", a: "2x", niv: "Difficile" },
-                { q: "Primitive de cos(x) ?", a: "sin(x)", niv: "Difficile" },
-                { q: "ln(e) = ?", a: "1", niv: "Difficile" },
-                { q: "i^2 = ?", a: "-1", niv: "Difficile" },
-                { q: "Logarithme de 10 en base 10 ?", a: "1", niv: "Difficile" },
-                { q: "Limite de 1/x quand x tend vers l'infini ?", a: "0", niv: "Difficile" }
-                // NOTE: Le code est prêt à recevoir les 130 autres que j'ai structurées de façon identique
+                {q: "Racine de 169 ?", a: "13", niv: "Moyen"},
+                {q: "Résoudre : 3x + 9 = 30", a: "7", niv: "Moyen"},
+                {q: "15% de 2000 ?", a: "300", niv: "Facile"},
+                {q: "Surface cercle rayon 7 (Pi=22/7) ?", a: "154", niv: "Difficile"},
+                {q: "Périmètre carré côté 12m ?", a: "48", niv: "Facile"},
+                {q: "Dérivée de x^2 ?", a: "2x", niv: "Difficile"},
+                {q: "Factorielle de 4 ?", a: "24", niv: "Difficile"},
+                {q: "Volume cube de 5cm ?", a: "125", niv: "Moyen"}
+                // Ajoute tes centaines de questions ici...
             ],
             histoire_geo: [
-                // HISTOIRE
-                { q: "Année de l'indépendance du Sénégal ?", a: "1960", niv: "Facile" },
-                { q: "Qui était le premier président ?", a: "Senghor", niv: "Facile" },
-                { q: "Date de la conférence de Berlin ?", a: "1884", niv: "Difficile" },
-                { q: "Qui a résisté au Cayor ?", a: "Lat Dior", niv: "Moyen" },
-                { q: "Hymne national écrit par ?", a: "Senghor", niv: "Moyen" },
-                { q: "Chef de la résistance en Casamance ?", a: "Aline Sitoe Diatta", niv: "Difficile" },
-                { q: "Année naufrage du Joola ?", a: "2002", niv: "Moyen" },
-                { q: "Qui a colonisé le Sénégal ?", a: "France", niv: "Facile" },
-                // GEO
-                { q: "Capitale du Sénégal ?", a: "Dakar", niv: "Facile" },
-                { q: "Le plus long fleuve d'Afrique ?", a: "Nil", niv: "Facile" },
-                { q: "Capitale de la Gambie ?", a: "Banjul", niv: "Moyen" },
-                { q: "Montagne la plus haute du monde ?", a: "Everest", niv: "Moyen" },
-                { q: "Capitale du Mali ?", a: "Bamako", niv: "Facile" },
-                { q: "Combien de régions au Sénégal ?", a: "14", niv: "Moyen" },
-                { q: "Capitale du Nigéria ?", a: "Abuja", niv: "Difficile" },
-                { q: "Désert au Nord de l'Afrique ?", a: "Sahara", niv: "Facile" }
+                {q: "Indépendance du Sénégal ?", a: "1960", niv: "Facile"},
+                {q: "Qui a résisté au Cayor ?", a: "Lat Dior", niv: "Moyen"},
+                {q: "Année Conférence de Berlin ?", a: "1884", niv: "Difficile"},
+                {q: "Capitale du Nigéria ?", a: "Abuja", niv: "Difficile"},
+                {q: "Hymne national par ?", a: "Senghor", niv: "Moyen"},
+                {q: "Plus long fleuve d'Afrique ?", a: "Nil", niv: "Facile"},
+                {q: "Capitale du Mali ?", a: "Bamako", niv: "Facile"},
+                {q: "Fondateur Empire du Mali ?", a: "Soundiata Keita", niv: "Moyen"}
+                // Ajoute tes centaines de questions ici...
             ],
             sciences: [
-                // SVT
-                { q: "Formule chimique de l'eau ?", a: "H2O", niv: "Facile" },
-                { q: "Symbole de l'oxygène ?", a: "O", niv: "Facile" },
-                { q: "Planète la plus proche du Soleil ?", a: "Mercure", niv: "Facile" },
-                { q: "Organe du goût ?", a: "Langue", niv: "Facile" },
-                { q: "Nombre de dents d'un adulte ?", a: "32", niv: "Moyen" },
-                { q: "Gaz nécessaire à la respiration ?", a: "Oxygene", niv: "Facile" },
-                // PC
-                { q: "Unité de la masse ?", a: "Kilogramme", niv: "Facile" },
-                { q: "Symbole du Fer ?", a: "Fe", niv: "Moyen" },
-                { q: "U = RI est la loi de ?", a: "Ohm", niv: "Moyen" },
-                { q: "Vitesse lumière (km/s) ?", a: "300000", niv: "Difficile" },
-                { q: "P = mg. g vaut environ ?", a: "10", niv: "Moyen" },
-                { q: "Symbole de l'Or ?", a: "Au", niv: "Difficile" },
-                { q: "Température ébullition de l'eau ?", a: "100", niv: "Facile" }
+                {q: "Symbole de l'Or ?", a: "Au", niv: "Moyen"},
+                {q: "H2O est la formule de ?", a: "Eau", niv: "Facile"},
+                {q: "Vitesse lumière (km/s) ?", a: "300000", niv: "Difficile"},
+                {q: "U = RI est la loi de ?", a: "Ohm", niv: "Moyen"},
+                {q: "Planète la plus rouge ?", a: "Mars", niv: "Facile"},
+                {q: "Passage solide à liquide ?", a: "Fusion", niv: "Moyen"}
+                // Ajoute tes centaines de questions ici...
             ]
         };
+        this.updateHistory();
     }
 
-    start() {
-        const mat = document.getElementById('select-matiere').value;
-        const niv = document.getElementById('select-niveau').value;
-        let pool = this.database[mat].filter(q => q.niv === niv);
-        if(pool.length === 0) pool = this.database[mat]; // Repli si pool vide
+    // CALCULATRICE SCIENTIFIQUE
+    doCalc() {
+        const input = document.getElementById('free-input');
+        try {
+            // Transformation des fonctions pour le moteur JS (ex: sin -> Math.sin)
+            let raw = input.value.toLowerCase().replace('x', '*');
+            let cooked = raw.replace(/sin|cos|tan|sqrt|log|exp|pow|pi/g, (m) => `Math.${m}`);
+            const res = eval(cooked);
+            this.history.push(`${input.value} = ${res}`);
+            if(this.history.length > 5) this.history.shift();
+            localStorage.setItem('nic_history', JSON.stringify(this.history));
+            this.updateHistory();
+            input.value = res;
+        } catch(e) { alert("Calcul invalide"); }
+    }
+
+    updateHistory() {
+        const box = document.getElementById('history-box');
+        if(box) box.innerHTML = this.history.join('<br>');
+    }
+
+    // QUIZ ÉDUCATIF
+    getQuiz() {
+        const m = document.getElementById('sel-mat').value;
+        const n = document.getElementById('sel-niv').value;
+        let pool = this.db[m].filter(q => q.niv === n);
+        if(pool.length === 0) pool = this.db[m];
         this.currentQ = pool[Math.floor(Math.random() * pool.length)];
-        document.getElementById('q-display').innerHTML = `<small style="color:#5865f2">${mat.toUpperCase()}</small><br>${this.currentQ.q}`;
+        const disp = document.getElementById('q-text');
+        disp.classList.remove('win-anim');
+        disp.innerHTML = `<small style="color:var(--accent)">[${m.toUpperCase()}]</small><br>${this.currentQ.q}`;
     }
 
-    check() {
-        const input = document.getElementById('elite-input');
-        const userAns = input.value.trim().toLowerCase();
-        const correctAns = this.currentQ.a.toLowerCase();
-        if (userAns === correctAns) {
+    checkQuiz() {
+        const user = document.getElementById('q-input').value.trim().toLowerCase();
+        const disp = document.getElementById('q-text');
+        if(user === this.currentQ.a.toLowerCase()) {
             this.score += 100;
             localStorage.setItem('nic_xp', this.score);
-            document.getElementById('elite-score').innerText = this.score;
-            this.feedback("🎯 CORRECT ! +100 XP", "#238636");
-            setTimeout(() => this.start(), 1200);
+            document.getElementById('xp-count').innerText = this.score;
+            disp.innerHTML = "<span style='color:var(--gold)'>🌟 BRAVO ! +100 XP 🌟</span>";
+            disp.classList.add('win-anim');
+            setTimeout(() => this.getQuiz(), 1500);
         } else {
-            this.feedback("❌ FAUX : " + this.currentQ.a, "#da3633");
-            setTimeout(() => this.start(), 2000);
+            disp.innerHTML = `<span style='color:var(--error)'>❌ RÉPONSE : ${this.currentQ.a}</span>`;
+            setTimeout(() => this.getQuiz(), 2000);
         }
-        input.value = "";
+        document.getElementById('q-input').value = "";
     }
-
-    feedback(msg, color) { document.getElementById('q-display').innerHTML = `<span style="color:${color}; font-weight:bold;">${msg}</span>`; }
 }
 
-const calc = new ToumanyCalculator();
-const elite = new EliteEducation();
-const CODE_SECRET = "TOP_CALCUL_2024";
+const app = new NicolyApp();
 
-function contactWhatsApp() { window.open("https://wa.me/221783113787?text=Code_Elite_Nicoly", "_blank"); }
-function verifierCode() {
-    const val = document.getElementById('promo-code-input').value.trim().toUpperCase();
-    if(val === CODE_SECRET) { localStorage.setItem('nic_premium', 'true'); unlock(); }
-    else { alert("Code invalide"); }
+// ACTIVATION & PAYPAL
+function verifierActivation() {
+    if(document.getElementById('code-activ').value.toUpperCase() === "TOP_CALCUL_2024") {
+        localStorage.setItem('nic_vip', 'true');
+        location.reload();
+    } else { alert("Code incorrect"); }
 }
 
-function unlock() {
-    document.getElementById('locked-ui').classList.add('hidden');
-    const ui = document.getElementById('game-ui');
-    ui.classList.remove('hidden');
-    ui.innerHTML = `
-        <div class="premium-badge">STUDIO ÉLITE SÉNÉGAL</div>
-        <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <select id="select-matiere" onchange="elite.start()" style="flex:1; background:#161b22; color:white; border:1px solid #30363d; padding:8px; border-radius:5px;">
+if (document.getElementById('paypal-button-container')) {
+    paypal.Buttons({
+        createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: '0.65' } }] }),
+        onApprove: (data, actions) => actions.order.capture().then(() => {
+            localStorage.setItem('nic_vip', 'true');
+            location.reload();
+        })
+    }).render('#paypal-button-container');
+}
+
+function loadEliteUI() {
+    document.getElementById('elite-zone').innerHTML = `
+        <div style="color:var(--gold); font-weight:bold; margin-bottom:10px;">🏆 SCORE : <span id="xp-count">${app.score}</span> XP</div>
+        <div style="display:flex; gap:5px; margin-bottom:15px;">
+            <select id="sel-mat" onchange="app.getQuiz()" style="flex:1; background:#21262d; color:white; padding:10px; border-radius:8px; border:none;">
                 <option value="maths">MATHS</option>
                 <option value="histoire_geo">HISTOIRE-GÉO</option>
                 <option value="sciences">SVT-PC</option>
             </select>
-            <select id="select-niveau" onchange="elite.start()" style="flex:1; background:#161b22; color:white; border:1px solid #30363d; padding:8px; border-radius:5px;">
+            <select id="sel-niv" onchange="app.getQuiz()" style="flex:1; background:#21262d; color:white; padding:10px; border-radius:8px; border:none;">
                 <option value="Facile">CFEE</option>
                 <option value="Moyen">BFEM</option>
                 <option value="Difficile">BAC</option>
             </select>
         </div>
-        <div class="quiz-box" style="border: 2px solid #5865f2; padding:20px; border-radius:10px; background:#010409;">
-            <div id="q-display" style="min-height:60px; font-weight:bold; text-align:center; display:flex; align-items:center; justify-content:center;">...</div>
-            <input type="text" id="elite-input" placeholder="Réponse..." style="width:100%; padding:12px; margin:15px 0; background:#0d1117; color:#fff; border:1px solid #5865f2; text-align:center; border-radius:5px; box-sizing:border-box;">
-            <button onclick="elite.check()" style="width:100%; background:#5865f2; font-weight:bold; padding:12px; border-radius:5px; color:white;">VÉRIFIER</button>
+        <div class="quiz-box">
+            <div id="q-text" style="min-height:70px; font-weight:bold;"></div>
+            <input type="text" id="q-input" placeholder="Réponse..." style="width:100%; padding:12px; margin:15px 0; background:#0d1117; color:white; border:1px solid var(--accent); border-radius:8px; text-align:center;">
+            <button onclick="app.checkQuiz()" style="width:100%; background:var(--accent);">VALIDER</button>
         </div>
-        <div style="margin-top:10px; text-align:center;">XP TOTAL : <span id="elite-score" style="color:#f59e0b">0</span></div>
     `;
-    document.getElementById('elite-score').innerText = elite.score;
-    elite.start();
+    app.getQuiz();
 }
 
-window.onload = () => { if(localStorage.getItem('nic_premium')==='true') unlock(); };
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+window.onload = () => { if(localStorage.getItem('nic_vip') === 'true') loadEliteUI(); };
