@@ -1,127 +1,87 @@
-class NicolyUltimate {
+class NicolyApp {
     constructor() {
-        this.history = JSON.parse(localStorage.getItem('nic_hist')) || [];
-        this.score = parseInt(localStorage.getItem('nic_xp')) || 0;
+        this.hist = JSON.parse(localStorage.getItem('nic_h')) || [];
+        this.xp = parseInt(localStorage.getItem('nic_x')) || 0;
         this.db = {
-            math: [
-                {q: "5! (Factorielle 5)", a: "120", niv: "facile"}, {q: "ln(e)", a: "1", niv: "facile"},
-                {q: "Dérivée de 3x²", a: "6x", niv: "moyen"}, {q: "cos(pi)", a: "-1", niv: "difficile"},
-                {q: "Racine de 144", a: "12", niv: "facile"}, {q: "log10(1000)", a: "3", niv: "moyen"}
-                // + 44 questions mathématiques...
-            ],
-            fr: [
-                {q: "Auteur de 'L'Aventure ambiguë' ?", a: "Cheikh Hamidou Kane", niv: "moyen"},
-                {q: "Auteur de 'Coup de pilon' ?", a: "David Diop", niv: "facile"},
-                {q: "Genre de 'Sous l'orage' ?", a: "Roman", niv: "facile"}
-                // + 47 questions français...
-            ],
-            ang: [
-                {q: "Past of 'Buy' ?", a: "Bought", niv: "moyen"},
-                {q: "Opposite of 'Weak' ?", a: "Strong", niv: "facile"}
-                // + 48 questions anglais...
-            ],
-            hg: [
-                {q: "Indépendance Sénégal ?", a: "1960", niv: "facile"},
-                {q: "Capitale du Nigéria ?", a: "Abuja", niv: "difficile"}
-                // + 48 questions HG...
-            ],
-            pc: [
-                {q: "Loi d'Ohm ?", a: "U=RI", niv: "facile"},
-                {q: "Symbole de l'Argent ?", a: "Ag", niv: "moyen"}
-                // + 48 questions PC...
-            ],
-            philo: [
-                {q: "Auteur de 'Le Discours de la Méthode' ?", a: "Descartes", niv: "moyen"},
-                {q: "L'homme est un animal politique, qui l'a dit ?", a: "Aristote", niv: "moyen"}
-                // + 48 questions Philo...
-            ]
+            math: [{q:"ln(e)",a:"1",niv:"f"},{q:"(15*4)/2",a:"30",niv:"f"},{q:"sqrt(144)",a:"12",niv:"f"},{q:"5!",a:"120",niv:"m"},{q:"Dérivée de x²",a:"2x",niv:"m"},{q:"cos(0)",a:"1",niv:"m"},{q:"i²",a:"-1",niv:"d"},{q:"Primitive de 1/x",a:"ln(x)",niv:"d"}],
+            fr: [{q:"Auteur de 'Une si longue lettre'?",a:"Mariama Ba",niv:"f"},{q:"Genre de 'Sous l'orage'?",a:"Roman",niv:"f"},{q:"Auteur de 'L'Aventure Ambiguë'?",a:"Cheikh Hamidou Kane",niv:"m"}],
+            hg: [{q:"Indépendance Sénégal?",a:"1960",niv:"f"},{q:"Plus long fleuve Afrique?",a:"Nil",niv:"f"},{q:"Capitale Nigéria?",a:"Abuja",niv:"d"}],
+            pc: [{q:"Formule eau?",a:"H2O",niv:"f"},{q:"Loi d'Ohm?",a:"U=RI",niv:"m"},{q:"Vitesse lumière (km/s)?",a:"300000",niv:"d"}],
+            philo: [{q:"Auteur du 'Cogito'?",a:"Descartes",niv:"m"},{q:"Père de la philosophie?",a:"Thalès",niv:"d"}]
         };
+        // Note: Pour atteindre 50 par matière, dupliquez et variez les questions dans l'objet db.
         this.init();
     }
 
     init() {
-        document.getElementById('xp-badge').innerText = this.score + " XP";
-        this.updateHistoryUI();
-        this.checkPremium();
+        document.getElementById('xp-val').innerText = this.xp + " XP";
+        this.updateHist();
+        if(localStorage.getItem('vip') === 'true') {
+            document.getElementById('pay-screen').classList.add('hidden');
+            document.getElementById('quiz-ui').classList.remove('hidden');
+            this.newQ();
+        }
+        this.setupPaypal();
     }
 
-    // CALCULATRICE
-    addText(t) { document.getElementById('calc-input').value += t; }
-    clear() { document.getElementById('calc-input').value = ""; }
+    nav(id) {
+        document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
 
-    solveAll() {
-        const val = document.getElementById('calc-input').value;
-        const step = document.getElementById('step-display');
-        const resDisp = document.getElementById('res-display');
-        
+    add(v) { document.getElementById('import-input').value += v; }
+    clear() { document.getElementById('import-input').value = ""; }
+
+    solve() {
+        const inp = document.getElementById('import-input').value;
+        const log = document.getElementById('steps');
+        const res = document.getElementById('result');
         try {
-            step.innerText = "Étape 1 : Analyse des fonctions... Étape 2 : Calcul prioritaire...";
-            let formatted = val.replace(/ln/g, 'Math.log').replace(/exp/g, 'Math.exp')
-                               .replace(/pi/g, 'Math.PI').replace(/sqrt/g, 'Math.sqrt');
-            
-            // Factorielle simplifiée
-            if(formatted.includes('!')) {
-                let n = parseInt(formatted);
-                let r = 1; for(let i=1;i<=n;i++) r*=i;
-                formatted = r;
-            }
-
-            const result = eval(formatted);
-            resDisp.innerText = result;
-            this.history.unshift(`${val} = ${result}`);
-            if(this.history.length > 5) this.history.pop();
-            this.updateHistoryUI();
-        } catch(e) { resDisp.innerText = "Erreur"; }
+            log.innerText = "Analyse mathématique... Étape 1 : Priorités... Étape 2 : Fonctions...";
+            let f = inp.replace(/ln/g,'Math.log').replace(/exp/g,'Math.exp').replace(/sqrt/g,'Math.sqrt');
+            if(f.includes('!')) { let n=parseInt(f); let r=1; for(let i=1;i<=n;i++) r*=i; f=r; }
+            const r = eval(f);
+            res.innerText = r;
+            this.hist.unshift(`${inp} = ${r}`);
+            localStorage.setItem('nic_h', JSON.stringify(this.hist.slice(0,10)));
+            this.updateHist();
+        } catch(e) { res.innerText = "Erreur"; }
     }
 
-    updateHistoryUI() {
-        const container = document.getElementById('history-list');
-        if(this.history.length === 0) return;
-        container.innerHTML = this.history.map(h => `<div class="history-item">${h}</div>`).join('');
-        localStorage.setItem('nic_hist', JSON.stringify(this.history));
+    updateHist() {
+        document.getElementById('hist-content').innerHTML = this.hist.map(h => `<div style="padding:15px;border-bottom:1px solid #222">${h}</div>`).join('');
     }
 
-    // JEUX
-    nextQ() {
-        const sub = document.getElementById('sel-subject').value;
-        const diff = document.getElementById('sel-diff').value;
-        const pool = this.db[sub].filter(q => q.niv === diff);
-        this.currentQ = pool[Math.floor(Math.random() * pool.length)];
-        document.getElementById('q-text').innerText = this.currentQ.q;
+    newQ() {
+        const m = document.getElementById('s-mat').value;
+        const n = document.getElementById('s-niv').value;
+        const p = this.db[m].filter(q => q.niv === n);
+        this.curr = p[Math.floor(Math.random()*p.length)];
+        document.getElementById('q-txt').innerText = this.curr.q;
         document.getElementById('q-box').classList.remove('win-anim');
     }
 
-    checkAnswer() {
-        const ans = document.getElementById('q-answer').value.trim().toLowerCase();
-        if(ans === this.currentQ.a.toLowerCase()) {
-            this.score += 100;
-            document.getElementById('xp-badge').innerText = this.score + " XP";
-            document.getElementById('q-box').classList.add('win-anim');
-            localStorage.setItem('nic_xp', this.score);
-            setTimeout(() => { document.getElementById('q-answer').value = ""; this.nextQ(); }, 1000);
-        } else { alert("Faux ! La réponse était : " + this.currentQ.a); this.nextQ(); }
-    }
-
-    // PAIEMENT (Fixé à 200 FCFA -> 0.30 EUR environ)
-    checkPremium() {
-        if(localStorage.getItem('nic_premium') === 'true') {
-            document.getElementById('locked-overlay').style.display = 'none';
-            document.getElementById('quiz-ui').classList.remove('hidden');
-            this.nextQ();
+    check() {
+        const a = document.getElementById('q-ans').value.trim().toLowerCase();
+        const b = document.getElementById('q-box');
+        if(a === this.curr.a.toLowerCase()) {
+            this.xp += 100; b.classList.add('win-anim');
         } else {
-            paypal.Buttons({
-                createOrder: (d, a) => a.order.create({ purchase_units: [{ amount: { value: '0.30' } }] }),
-                onApprove: (d, a) => a.order.capture().then(() => { localStorage.setItem('nic_premium', 'true'); location.reload(); })
-            }).render('#paypal-button-container');
+            this.xp = Math.max(0, this.xp - 50); alert("Faux! C'était: "+this.curr.a);
         }
+        localStorage.setItem('nic_x', this.xp);
+        document.getElementById('xp-val').innerText = this.xp + " XP";
+        document.getElementById('q-ans').value = "";
+        this.newQ();
     }
 
-    activate() {
-        if(document.getElementById('code-input').value === "NICOLY200") {
-            localStorage.setItem('nic_premium', 'true');
-            location.reload();
-        }
+    setupPaypal() {
+        paypal.Buttons({
+            createOrder: (d,a) => a.order.create({purchase_units:[{amount:{value:'0.30'}}]}),
+            onApprove: (d,a) => a.order.capture().then(() => { localStorage.setItem('vip','true'); location.reload(); })
+        }).render('#paypal-button-container');
     }
+
+    unlock() { if(document.getElementById('code-in').value === "NICOLY200") { localStorage.setItem('vip','true'); location.reload(); } }
 }
-
-const app = new NicolyUltimate();
+const app = new NicolyApp();
