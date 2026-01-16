@@ -1,26 +1,25 @@
-const CACHE_NAME = 'nicoly-pro-v1';
+const CACHE_NAME = 'nicoly-v2';
 const assets = [
   './',
   './index.html',
   './style.css',
   './app.js',
-  './logo.png',
-  './manifest.json'
+  './manifest.json',
+  './logo.png'
 ];
 
-// Installation du Service Worker et mise en cache des fichiers
-self.addEventListener('install', evt => {
-  evt.waitUntil(
+// Installation : Mise en cache des ressources
+self.addEventListener('install', e => {
+  e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Mise en cache des ressources Nicoly-io');
       return cache.addAll(assets);
     })
   );
 });
 
-// Activation et nettoyage des anciens caches
-self.addEventListener('activate', evt => {
-  evt.waitUntil(
+// Activation : Nettoyage des anciens caches
+self.addEventListener('activate', e => {
+  e.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(keys
         .filter(key => key !== CACHE_NAME)
@@ -30,11 +29,11 @@ self.addEventListener('activate', evt => {
   );
 });
 
-// Récupération des ressources (permet le mode hors-ligne)
-self.addEventListener('fetch', evt => {
-  evt.respondWith(
-    caches.match(evt.request).then(cacheRes => {
-      return cacheRes || fetch(evt.request);
+// Stratégie : Cache First (Priorité au cache pour la rapidité)
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
     })
   );
 });
