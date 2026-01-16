@@ -3,102 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NICOLY-IO PRO</title>
+    <title>Nicoly-io Pro - Calculatrice & Excellence</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <link rel="stylesheet" href="style.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
 </head>
 <body>
 
-    <div class="app-shell">
-        <header class="app-header">
-            <img src="logo.png" alt="Logo" class="app-logo">
-            <div class="header-info">
-                <h1 class="neon-text">NICOLY-IO</h1>
-                <div id="xp-badge" class="xp-counter">0 XP</div>
-            </div>
-        </header>
+    <section id="view-calc" class="app-page active">
+        <div class="page-header">
+            <h2>SCIENTIFIQUE PRO</h2>
+            <div id="xp-val" class="xp-badge">0 XP</div>
+        </div>
+        
+        <div class="import-zone">
+            <textarea id="import-input" placeholder="Collez ici votre opération complexe (ex: ln(50) + exp(2) / 4!)"></textarea>
+            <button onclick="app.solve()" class="btn-main">RÉSOUDRE AVEC ÉTAPES</button>
+        </div>
 
-        <main class="content-scroll">
+        <div class="screen">
+            <div id="steps" class="step-text">Prêt...</div>
+            <div id="result" class="res-text">0</div>
+        </div>
+
+        <div class="pad">
+            <button class="s-btn" onclick="app.add('ln(')">ln</button>
+            <button class="s-btn" onclick="app.add('exp(')">exp</button>
+            <button class="s-btn" onclick="app.add('!')">n!</button>
+            <button class="s-btn" onclick="app.add('Math.PI')">π</button>
             
-            <section class="section-card">
-                <div class="section-header">
-                    <span class="icon">🔬</span>
-                    <h2>Calculatrice Scientifique</h2>
-                </div>
-                <div class="calc-container">
-                    <input type="text" id="calc-input" class="sci-input" placeholder="Tapez : ln(5), 4!, 5*pi...">
-                    <div id="step-display" class="step-box">Prêt pour le calcul...</div>
-                    <div id="res-display" class="result-display">0</div>
-                    <div class="calc-controls">
-                        <button onclick="app.addText('ln(')">ln</button>
-                        <button onclick="app.addText('exp(')">exp</button>
-                        <button onclick="app.addText('!')">n!</button>
-                        <button onclick="app.addText('pi')">π</button>
-                        <button onclick="app.addText('sqrt(')">√</button>
-                        <button onclick="app.solveAll()" class="btn-equal">RÉSOUDRE ÉTAPE PAR ÉTAPE</button>
-                        <button onclick="app.clear()" class="btn-ac">AC</button>
-                    </div>
-                </div>
-            </section>
+            <button onclick="app.add('7')">7</button><button onclick="app.add('8')">8</button><button onclick="app.add('9')">9</button><button class="o-btn" onclick="app.add('/')">÷</button>
+            <button onclick="app.add('4')">4</button><button onclick="app.add('5')">5</button><button onclick="app.add('6')">6</button><button class="o-btn" onclick="app.add('*')">×</button>
+            <button onclick="app.add('1')">1</button><button onclick="app.add('2')">2</button><button onclick="app.add('3')">3</button><button class="o-btn" onclick="app.add('-')">-</button>
+            <button class="c-btn" onclick="app.clear()">AC</button><button onclick="app.add('0')">0</button><button onclick="app.add('.')">.</button><button class="e-btn" onclick="app.solve()">=</button>
+        </div>
+    </section>
 
-            <section class="section-card">
-                <div class="section-header">
-                    <span class="icon">📜</span>
-                    <h2>Historique des Calculs</h2>
-                </div>
-                <div id="history-list" class="history-list">
-                    <p class="empty-msg">Aucun calcul récent</p>
-                </div>
-            </section>
+    <section id="view-hist" class="app-page">
+        <div class="page-header"><h2>HISTORIQUE</h2></div>
+        <div id="hist-content" class="list-container"></div>
+    </section>
 
-            <section class="section-card" id="game-section">
-                <div class="section-header">
-                    <span class="icon">🎮</span>
-                    <h2>Défis Intellectuels</h2>
-                </div>
+    <section id="view-game" class="app-page">
+        <div id="pay-screen" class="overlay">
+            <h3>ACCÈS ÉLITE : 200 FCFA</h3>
+            <div id="paypal-button-container"></div>
+            <p>Ou Wave/Orange au <strong>78 311 37 87</strong></p>
+            <input type="text" id="code-in" placeholder="Code reçu">
+            <button onclick="app.unlock()" class="btn-main">ACTIVER</button>
+        </div>
+        <div id="quiz-ui" class="hidden">
+            <div class="quiz-nav">
+                <select id="s-mat" onchange="app.newQ()">
+                    <option value="math">MATHS</option>
+                    <option value="pc">PC/CHIMIE</option>
+                    <option value="fr">FRANÇAIS</option>
+                    <option value="hg">HIST-GÉO</option>
+                    <option value="ang">ANGLAIS</option>
+                    <option value="philo">PHILO</option>
+                </select>
+                <select id="s-niv" onchange="app.newQ()">
+                    <option value="f">Facile</option>
+                    <option value="m">Moyen</option>
+                    <option value="d">Difficile</option>
+                </select>
+            </div>
+            <div id="q-box" class="card">
+                <p id="q-txt">Chargement du quiz...</p>
+                <input type="text" id="q-ans" placeholder="Réponse">
+                <button onclick="app.check()" class="btn-main">VALIDER</button>
+            </div>
+        </div>
+    </section>
 
-                <div id="locked-overlay" class="premium-lock">
-                    <div class="lock-content">
-                        <h3>Accès Complet : 200 FCFA</h3>
-                        <p>350+ Questions (Français, Anglais, Philo, PC...)</p>
-                        <div id="paypal-button-container"></div>
-                        <div class="payment-divider">OU PAYER PAR MOBILE</div>
-                        <div class="mobile-pay">
-                            <p>Wave / Orange : <strong>78 311 37 87</strong></p>
-                            <input type="text" id="code-input" placeholder="Code d'activation">
-                            <button onclick="app.activate()" class="btn-unlock">ACTIVER MAINTENANT</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="quiz-ui" class="quiz-container hidden">
-                    <div class="quiz-filters">
-                        <select id="sel-subject" onchange="app.nextQ()">
-                            <option value="math">Mathématiques</option>
-                            <option value="fr">Français</option>
-                            <option value="ang">Anglais</option>
-                            <option value="hg">Hist-Géo</option>
-                            <option value="pc">Physique-Chimie</option>
-                            <option value="philo">Philosophie</option>
-                        </select>
-                        <select id="sel-diff" onchange="app.nextQ()">
-                            <option value="facile">Facile</option>
-                            <option value="moyen">Moyen</option>
-                            <option value="difficile">Difficile</option>
-                        </select>
-                    </div>
-                    <div id="q-box" class="question-card">
-                        <p id="q-text">Chargement du défi...</p>
-                        <input type="text" id="q-answer" placeholder="Votre réponse">
-                        <button onclick="app.checkAnswer()" class="btn-submit">VALIDER LA RÉPONSE</button>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-    </div>
+    <nav class="tabs">
+        <button onclick="app.nav('view-calc')">🧮 Calcul</button>
+        <button onclick="app.nav('view-hist')">📜 Historique</button>
+        <button onclick="app.nav('view-game')">🎮 Jeux</button>
+    </nav>
 
     <script src="app.js"></script>
+    <script>
+        // Active le mode hors-ligne (Service Worker)
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js');
+        }
+    </script>
 </body>
 </html>
