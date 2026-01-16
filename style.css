@@ -1,31 +1,80 @@
-:root { --bg: #05080a; --card: #0f131a; --blue: #00d2ff; --gold: #ffbe0b; --red: #ff4b2b; --green: #00ff88; }
-* { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background: var(--bg); color: #fff; margin: 0; height: 100vh; overflow: hidden; }
+:root {
+    --bg: #05080a;
+    --card: #11151c;
+    --blue: #00d2ff;
+    --wave: #1cbcf2;
+    --orange: #ff7900;
+    --gold: #ffbe0b;
+    --red: #ff4b2b;
+    --green: #00ff88;
+    --text: #ffffff;
+}
 
-.app-page { display: none; height: calc(100vh - 70px); padding: 5vw; flex-direction: column; overflow-y: auto; }
-.app-page.active { display: flex; animation: slide 0.3s ease; }
-@keyframes slide { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.xp-badge { background: var(--gold); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: 900; }
+body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; }
 
-.import-zone textarea { width: 100%; height: 80px; background: #141921; border: 1px dashed var(--blue); color: #fff; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
-.screen { background: #000; padding: 20px; border-radius: 15px; text-align: right; margin-bottom: 15px; border-right: 4px solid var(--blue); }
-.res-text { font-size: clamp(1.5rem, 8vw, 2.5rem); color: var(--green); font-weight: bold; }
+/* Pages & Navigation */
+.app-page { display: none; height: calc(100vh - 75px); padding: 20px; flex-direction: column; overflow-y: auto; }
+.app-page.active { display: flex; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.pad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2vw; flex-grow: 1; }
-button { border: none; border-radius: 12px; background: #1e2530; color: #fff; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
-.s-btn { background: #2d3644; color: var(--blue); font-size: 0.9rem; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.xp-badge { background: var(--gold); color: #000; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; }
+
+/* Calculatrice */
+.import-zone textarea {
+    width: 100%; height: 70px; background: #0c1016; border: 1px dashed var(--blue);
+    color: #fff; border-radius: 12px; padding: 10px; margin-bottom: 10px; resize: none;
+}
+.screen-box { background: #000; padding: 25px; border-radius: 15px; text-align: right; margin-bottom: 15px; border-left: 5px solid var(--blue); }
+.res-text { font-size: 2.2rem; font-weight: bold; color: var(--green); overflow-x: auto; }
+
+.pad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex-grow: 1; }
+button { border: none; border-radius: 12px; background: #1e2530; color: #fff; font-weight: bold; cursor: pointer; }
+.s-btn { background: #2d3644; color: var(--blue); }
 .o-btn { background: #3a86ff; }
 .e-btn { background: var(--green); color: #000; }
 .c-btn { background: var(--red); }
+.btn-main-solve { background: var(--blue); color: #000; padding: 12px; width: 100%; border-radius: 10px; font-weight: 900; }
 
-.tabs { position: fixed; bottom: 0; width: 100%; height: 70px; background: #0a0e14; display: flex; border-top: 1px solid #222; }
-.tabs button { flex: 1; background: none; font-size: 0.8rem; flex-direction: column; color: #777; }
+/* Historique & Panel */
+.step-panel {
+    position: fixed; bottom: 75px; left: 0; width: 100%; height: 0;
+    background: #161b22; border-top: 4px solid var(--blue);
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; z-index: 100;
+}
+.step-panel.open { height: 65vh; padding: 25px; }
+.btn-close { float: right; background: none; font-size: 2rem; color: var(--red); padding: 0; }
 
-.card { background: var(--card); padding: 25px; border-radius: 20px; text-align: center; }
+/* Paiement */
+.pay-card { background: var(--card); padding: 25px; border-radius: 25px; text-align: center; border: 1px solid #333; }
+.price-tag { font-size: 2.5rem; font-weight: 900; color: var(--gold); margin: 10px 0; }
+.mobile-pay-btns { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.pay-btn {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 14px; border-radius: 15px; text-decoration: none; color: white; font-weight: bold;
+}
+.wave { background: var(--wave); }
+.orange { background: var(--orange); }
+.pay-btn img { width: 24px; height: 24px; }
+.manual-code { margin-top: 15px; }
+.manual-code input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #000; color: #fff; margin-bottom: 8px; }
+
+/* Navigation */
+.bottom-tabs { position: fixed; bottom: 0; width: 100%; height: 75px; background: #0a0e14; display: flex; border-top: 1px solid #222; }
+.bottom-tabs button { flex: 1; background: none; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; font-size: 0.7rem; }
+.bottom-tabs i { font-style: normal; font-size: 1.4rem; margin-bottom: 2px; }
+
+/* Quiz */
+.quiz-header { display: flex; gap: 10px; margin-bottom: 15px; }
+.quiz-header select { flex: 1; padding: 10px; border-radius: 8px; background: #222; color: #fff; border: none; }
+.quiz-card { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; }
+
+/* Responsivité Tablettes & Desktop */
+@media (min-width: 700px) {
+    body { display: flex; justify-content: center; }
+    .app-page, .bottom-tabs, .step-panel { width: 450px; border-left: 1px solid #333; border-right: 1px solid #333; }
+}
+
 .hidden { display: none; }
-.win-anim { animation: celebrate 0.5s ease; border: 2px solid var(--green); }
-@keyframes celebrate { 50% { transform: scale(1.05); } }
-
-@media (min-width: 768px) { .app-page, .tabs { width: 450px; margin: 0 auto; border-left: 1px solid #333; border-right: 1px solid #333; } }
