@@ -3,34 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcul Intelligent | Nicoly-io</title>
-    
+    <title>Nicoly-io | Élite Éducation</title>
     <link rel="stylesheet" href="style.css">
-
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#0d1117">
     <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
 </head>
 <body>
-
-    <header class="seo-header">
-        <h1>Calcul Intelligent</h1>
-        <p>Expertise en calcul par <strong>Nicoly-io</strong></p>
-    </header>
-
     <div class="main-container">
         <section class="calculator card">
             <div class="display">
                 <div id="previous-operand" class="previous-operand"></div>
                 <div id="current-operand" class="current-operand">0</div>
             </div>
-            <div class="complex-input-group">
-                <input type="text" id="complex-input" placeholder="Ex: sqrt(81)*2">
-                <button onclick="calc.solveComplex()" class="btn-solve">OK</button>
-            </div>
             <div class="buttons">
-                <button onclick="calc.scientific('Math.sqrt')" class="btn-sci">√</button>
-                <button onclick="calc.scientific('Math.pow')" class="btn-sci">x²</button>
-                <button onclick="calc.scientific('Math.log10')" class="btn-sci">log</button>
-                <button onclick="calc.scientific('Math.PI')" class="btn-sci">π</button>
                 <button onclick="calc.clear()" class="btn-alt col-span-2">AC</button>
                 <button onclick="calc.delete()" class="btn-alt">DEL</button>
                 <button onclick="calc.chooseOp('/')" class="btn-op">÷</button>
@@ -52,36 +39,19 @@
             </div>
         </section>
 
-        <div class="side-panel">
-            <section class="history-card card">
-                <h3>📜 Historique</h3>
-                <ul id="history-list"></ul>
-                <button onclick="calc.clearHistory()" class="btn-clear-hist">Effacer</button>
-            </section>
-
-            <section class="premium-card card">
-                <div id="locked-ui" class="overlay">
-                    <h3>Arcade Premium 🏆</h3>
-                    <p>Débloquez tout pour <b>400 FCFA</b></p>
-                    <button onclick="contactPourCode()" class="btn-paytech">Payer via Wave / OM</button>
-                    <div class="separator">DÉJÀ PAYÉ ?</div>
-                    <input type="text" id="promo-code-input" placeholder="Entrez le code">
-                    <button onclick="verifierCode()" class="btn-activate">Activer</button>
-                    <div class="separator">OU PAYPAL</div>
-                    <div id="paypal-button-container"></div>
-                </div>
-                <div id="game-ui" class="game-content hidden">
-                    <div class="premium-badge">PREMIUM ACTIVÉ</div>
-                    <div class="quiz-box">
-                        <div id="question">?</div>
-                        <input type="number" id="answer-input" placeholder="Rép.">
-                        <button onclick="game.check()">Valider</button>
-                    </div>
-                </div>
-            </section>
-        </div>
+        <section class="premium-card card" id="premium-section">
+            <div id="locked-ui">
+                <h3>Zone Élite Éducation 🏆</h3>
+                <p>Accès illimité pour <b>400 FCFA</b></p>
+                <button onclick="contactWhatsApp()" class="btn-paytech">Payer par Wave (78 311 37 87)</button>
+                <div class="separator">OU ACTIVER AVEC CODE</div>
+                <input type="text" id="promo-code-input" placeholder="Entrer le code secret">
+                <button onclick="verifierCode()" class="btn-activate">Activer l'Espace</button>
+                <div id="paypal-button-container" style="margin-top:15px;"></div>
+            </div>
+            <div id="game-ui" class="hidden"></div>
+        </section>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
