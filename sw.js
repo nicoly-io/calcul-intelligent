@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nicoly-pro-v4';
+const CACHE_NAME = 'nicoly-pro-v5'; // Version augmentée pour forcer la mise à jour mobile
 const assets = [
   './',
   './index.html',
@@ -10,17 +10,17 @@ const assets = [
   './apple-touch-icon.png'
 ];
 
-// Installation : Mise en cache de tous les fichiers du projet
+// Installation : Force le navigateur à charger les nouveaux fichiers immédiatement
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Force le nouveau Service Worker à devenir actif
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Installation : Mise en cache des ressources Nicoly-io Pro');
       return cache.addAll(assets);
     })
   );
 });
 
-// Activation : Nettoyage des anciennes versions pour éviter les bugs
+// Activation : Supprime l'ancien cache (v4) pour libérer de l'espace et éviter les conflits
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
@@ -30,10 +30,10 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  return self.clients.claim(); // Prend le contrôle des pages immédiatement
 });
 
-// Stratégie de récupération : Priorité au cache (Offline First)
-// Si l'utilisateur est hors-ligne, le SW servira les fichiers déjà stockés.
+// Stratégie : Récupère d'abord dans le cache, sinon sur le réseau
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(cacheRes => {
