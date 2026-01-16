@@ -1,7 +1,7 @@
 {
   "short_name": "Nicoly-io",
-  "name": "Nicoly-io Pro: Calculateur & Élite",
-  "description": "Calculatrice scientifique avancée et quiz d'excellence académique.",
+  "name": "Nicoly-io Pro: Calcul & Élite",
+  "description": "Calculatrice scientifique avancée et quiz d'excellence académique pour le Sénégal.",
   "icons": [
     {
       "src": "logo.png",
@@ -19,5 +19,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#05080a",
-  "theme_color": "#00d2ff"
+  "theme_color": "#00d2ff",
+  "scope": "./",
+  "lang": "fr"
 }
