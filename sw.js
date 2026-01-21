@@ -1,43 +1,46 @@
-const CACHE_NAME = 'nicoly-pro-v5'; // Version augmentée pour forcer la mise à jour mobile
+// Version 10 - Force la mise à jour sur tous les appareils
+const CACHE_NAME = 'nicoly-ultimate-v10';
+
+// Liste des fichiers essentiels à sauvegarder pour le mode hors-ligne
 const assets = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.json',
-  './logo.png',
   './favicon.ico',
+  './logo.png',
   './apple-touch-icon.png'
 ];
 
-// Installation : Force le navigateur à charger les nouveaux fichiers immédiatement
-self.addEventListener('install', event => {
-  self.skipWaiting(); // Force le nouveau Service Worker à devenir actif
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
+// 1. INSTALLATION : Télécharge les fichiers dans le cache du téléphone
+self.addEventListener('install', (e) => {
+  self.skipWaiting(); // Force l'activation immédiate
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Hub Nicoly-io : Mise en cache sécurisée');
       return cache.addAll(assets);
     })
   );
 });
 
-// Activation : Supprime l'ancien cache (v4) pour libérer de l'espace et éviter les conflits
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(keys
-        .filter(key => key !== CACHE_NAME)
-        .map(key => caches.delete(key))
+// 2. ACTIVATION : Supprime les vieilles versions (v7, v8, etc.) pour libérer de l'espace
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
       );
     })
   );
-  return self.clients.claim(); // Prend le contrôle des pages immédiatement
+  return self.clients.claim(); // Prend le contrôle du site sans rafraîchir
 });
 
-// Stratégie : Récupère d'abord dans le cache, sinon sur le réseau
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(cacheRes => {
-      return cacheRes || fetch(event.request);
+// 3. FETCH : Récupère les fichiers du cache si l'élève n'a pas de connexion
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((res) => {
+      return res || fetch(e.request);
     })
   );
 });
