@@ -3,123 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nicoly-io Pro</title>
-    
+    <title>Ultimate Scientific Hub - Nicoly-io</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" href="favicon.ico">
-    <meta name="theme-color" content="#05080a">
-
     <link rel="stylesheet" href="style.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
 </head>
 <body>
 
-    <section id="view-calc" class="app-page active">
-        <div class="page-header">
-            <h2>SCIENTIFIQUE</h2>
-            <div id="xp-val" class="xp-badge">0 XP</div>
-        </div>
-        
-        <div class="import-zone">
-            <textarea id="import-input" placeholder="Collez votre opération (ex: ln(50) + exp(2) * 4!)"></textarea>
-            <button onclick="app.solve()" class="btn-main-solve">CALCULER LE RÉSULTAT</button>
-        </div>
-
-        <div class="screen-box">
-            <div id="result" class="res-text">0</div>
-        </div>
-
-        <div class="pad-grid">
-            <button class="s-btn" onclick="app.add('ln(')">ln</button>
-            <button class="s-btn" onclick="app.add('exp(')">exp</button>
-            <button class="s-btn" onclick="app.add('!')">n!</button>
-            <button class="s-btn" onclick="app.add('Math.PI')">π</button>
-            
-            <button onclick="app.add('7')">7</button><button onclick="app.add('8')">8</button><button onclick="app.add('9')">9</button><button class="o-btn" onclick="app.add('/')">÷</button>
-            <button onclick="app.add('4')">4</button><button onclick="app.add('5')">5</button><button onclick="app.add('6')">6</button><button class="o-btn" onclick="app.add('*')">×</button>
-            <button onclick="app.add('1')">1</button><button onclick="app.add('2')">2</button><button onclick="app.add('3')">3</button><button class="o-btn" onclick="app.add('-')">-</button>
-            <button class="c-btn" onclick="app.clear()">AC</button><button onclick="app.add('0')">0</button><button onclick="app.add('.')">.</button><button class="e-btn" onclick="app.solve()">=</button>
-        </div>
-    </section>
-
-    <section id="view-hist" class="app-page">
-        <div class="page-header"><h2>HISTORIQUE</h2></div>
-        <div id="hist-content" class="list-container">
-            <p class="empty-msg">Aucun calcul récent. Cliquez sur un calcul pour voir les étapes.</p>
-        </div>
-        
-        <div id="step-panel" class="step-panel">
-            <button onclick="app.closeSteps()" class="btn-close">×</button>
-            <h3><small>MÉTHODE DE</small><br>RÉSOLUTION</h3>
-            <hr>
-            <div id="step-details-content"></div>
-        </div>
-    </section>
-
-    <section id="view-game" class="app-page">
-        <div id="pay-screen" class="overlay">
-            <div class="pay-card">
-                <h3>ACCÈS ÉLITE</h3>
-                <p class="price-tag">200 FCFA</p>
-                
-                <div id="paypal-button-container"></div>
-                
-                <div class="divider">OU VIA MOBILE AU 783113787</div>
-                
-                <div class="mobile-pay-btns">
-                    <a href="tel:#2171#1*783113787*200#" class="pay-btn wave">
-                        <img src="https://vps.vps9.net/wave-logo.png" onerror="this.src='https://via.placeholder.com/30?text=W'" alt="W">
-                        <span>Payer avec Wave</span>
-                    </a>
-                    
-                    <a href="tel:#144#2*1*1*783113787*200#" class="pay-btn orange">
-                        <img src="https://vps.vps9.net/orange-logo.png" onerror="this.src='https://via.placeholder.com/30?text=O'" alt="O">
-                        <span>Orange Money</span>
-                    </a>
-                </div>
-
-                <div class="manual-code">
-                    <input type="text" id="code-in" placeholder="Code secret d'activation">
-                    <button onclick="app.unlock()" class="btn-activate">ACTIVER MAINTENANT</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="quiz-ui" class="hidden">
-            <div class="quiz-header">
-                <select id="s-mat" onchange="app.newQ()">
-                    <option value="math">MATHÉMATIQUES</option>
-                    <option value="pc">PHYSIQUE-CHIMIE</option>
-                    <option value="svt">SVT</option>
-                    <option value="fr">FRANÇAIS</option>
-                    <option value="hg">HISTOIRE-GÉO</option>
-                </select>
-                <select id="s-niv" onchange="app.newQ()">
-                    <option value="f">Facile</option>
-                    <option value="m">Moyen</option>
-                    <option value="d">Difficile</option>
-                </select>
-            </div>
-            <div id="q-box" class="quiz-card">
-                <p id="q-txt">Appuyez pour commencer...</p>
-                <input type="text" id="q-ans" placeholder="Votre réponse">
-                <button onclick="app.check()" class="btn-main-solve">VALIDER</button>
-            </div>
-        </div>
-    </section>
-
-    <nav class="bottom-tabs">
-        <button onclick="app.nav('view-calc')"><i>🧮</i><span>Calcul</span></button>
-        <button onclick="app.nav('view-hist')"><i>📜</i><span>Historique</span></button>
-        <button onclick="app.nav('view-game')"><i>🎮</i><span>Jeux</span></button>
+    <nav class="side-nav">
+        <div class="nav-logo">N</div>
+        <button onclick="app.nav('view-calc')" title="Calculatrice">🧮</button>
+        <button onclick="app.nav('view-conv')" title="Convertisseur">🔄</button>
+        <button onclick="app.nav('view-hist')" title="Historique & Steps">📜</button>
+        <button onclick="app.nav('view-game')" title="Quiz Élite">🎮</button>
     </nav>
 
+    <main class="main-content">
+        <section id="view-calc" class="app-page active">
+            <div class="glass-card">
+                <div class="display">
+                    <div id="main-res">0</div>
+                </div>
+                <div class="keypad" id="sci-keypad"></div>
+            </div>
+        </section>
+
+        <section id="view-conv" class="app-page">
+            <h2 class="section-title">Convertisseur Universel</h2>
+            <div class="bento-grid">
+                <div class="conv-card"><span>💰</span>Devise</div>
+                <div class="conv-card"><span>🧪</span>Volume</div>
+                <div class="conv-card"><span>⚖️</span>Poids</div>
+                <div class="conv-card"><span>🌡️</span>Temp</div>
+                <div class="conv-card"><span>🚀</span>Vitesse</div>
+                <div class="conv-card"><span>💾</span>Données</div>
+                <div class="conv-card"><span>🔌</span>Puissance</div>
+                <div class="conv-card"><span>📐</span>Angle</div>
+            </div>
+        </section>
+
+        <section id="view-hist" class="app-page">
+            <h2 class="section-title">Historique Intelligent</h2>
+            <div id="hist-list" class="list-container"></div>
+            <div id="solver-drawer" class="drawer">
+                <button onclick="app.closeDrawer()" class="close-btn">×</button>
+                <div id="solver-content"></div>
+            </div>
+        </section>
+
+        <section id="view-game" class="app-page">
+            <div id="pay-screen" class="glass-card pay-overlay">
+                <h2 class="neon-text">ACCÈS ÉLITE</h2>
+                <div class="price-tag">200 FCFA</div>
+                
+                <div id="paypal-button-container"></div>
+                <div class="divider">OU PAIEMENT DIRECT</div>
+
+                <div class="pay-grid">
+                    <a href="tel:#2171#1*783113787*200#" class="btn-pay wave">WAVE DIRECT</a>
+                    <a href="tel:#144#2*1*1*783113787*200#" class="btn-pay orange">ORANGE DIRECT</a>
+                </div>
+
+                <div class="activation-zone">
+                    <input type="text" id="code-in" placeholder="ENTRER LE CODE D'ACCÈS">
+                    <button onclick="app.unlock()" class="btn-unlock">ACTIVER MAINTENANT</button>
+                </div>
+            </div>
+
+            <div id="quiz-hub" class="hidden">
+                <div class="quiz-header">
+                    <div id="xp-counter">XP: 0</div>
+                    <select id="q-diff" onchange="app.newQ()">
+                        <option value="f">Facile</option>
+                        <option value="m">Moyen</option>
+                        <option value="d">Difficile</option>
+                    </select>
+                </div>
+                <div class="bento-grid">
+                    <div class="bento-card math" onclick="app.startQuiz('math')"><i>📐</i><h3>Maths</h3></div>
+                    <div class="bento-card pc" onclick="app.startQuiz('pc')"><i>⚡</i><h3>Physique</h3></div>
+                    <div class="bento-card svt" onclick="app.startQuiz('svt')"><i>🧬</i><h3>SVT</h3></div>
+                    <div class="bento-card fr" onclick="app.startQuiz('fr')"><i>✍️</i><h3>Français</h3></div>
+                    <div class="bento-card hg" onclick="app.startQuiz('hg')"><i>🌍</i><h3>H-G</h3></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
     <script src="app.js"></script>
-    <script>
-        if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js');
-        }
-    </script>
 </body>
 </html>
