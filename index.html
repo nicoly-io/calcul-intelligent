@@ -3,94 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Scientific Hub - Nicoly-io</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="icon" href="favicon.ico">
+    <title>Ultimate Scientific Hub</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/algebrite/1.4.0/algebrite.bundle-for-browser.min.js"></script>
 </head>
 <body>
 
-    <nav class="side-nav">
-        <div class="nav-logo">N</div>
-        <button onclick="app.nav('view-calc')" title="Calculatrice">🧮</button>
-        <button onclick="app.nav('view-conv')" title="Convertisseur">🔄</button>
-        <button onclick="app.nav('view-hist')" title="Historique & Steps">📜</button>
-        <button onclick="app.nav('view-game')" title="Quiz Élite">🎮</button>
+    <nav class="main-nav">
+        <button class="nav-btn active" onclick="app.switchTab('calc')">🔢 Calcul</button>
+        <button class="nav-btn" onclick="app.switchTab('hist')">📜 Historique</button>
+        <button class="nav-btn" onclick="app.switchTab('game')">🎮 Jeux</button>
     </nav>
 
-    <main class="main-content">
-        <section id="view-calc" class="app-page active">
-            <div class="glass-card">
-                <div class="display">
-                    <div id="main-res">0</div>
+    <main class="content">
+        <section id="tab-calc" class="tab-page active">
+            <div class="header-tools">
+                <span id="mode-label">Scientifique</span>
+                <button class="btn-more" onclick="app.toggleSub()">⋮</button>
+                <div id="dropdown" class="dropdown hidden">
+                    <p class="drop-title">CALCULATRICE</p>
+                    <button onclick="app.setMode('std')">Standard</button>
+                    <button onclick="app.setMode('sci')">Scientifique / Trig</button>
+                    <button onclick="app.setMode('prog')">Programmeur</button>
+                    <button onclick="app.setMode('date')">Calcul de dates</button>
+                    <p class="drop-title">CONVERTISSEUR</p>
+                    <button onclick="app.setMode('conv')">Toutes les unités</button>
                 </div>
-                <div class="keypad" id="sci-keypad"></div>
             </div>
+
+            <div class="glass-display">
+                <div id="math-output"></div>
+                <div id="input-val">0</div>
+            </div>
+
+            <div id="numpad" class="numpad-grid"></div>
         </section>
 
-        <section id="view-conv" class="app-page">
-            <h2 class="section-title">Convertisseur Universel</h2>
-            <div class="bento-grid">
-                <div class="conv-card"><span>💰</span>Devise</div>
-                <div class="conv-card"><span>🧪</span>Volume</div>
-                <div class="conv-card"><span>⚖️</span>Poids</div>
-                <div class="conv-card"><span>🌡️</span>Temp</div>
-                <div class="conv-card"><span>🚀</span>Vitesse</div>
-                <div class="conv-card"><span>💾</span>Données</div>
-                <div class="conv-card"><span>🔌</span>Puissance</div>
-                <div class="conv-card"><span>📐</span>Angle</div>
-            </div>
+        <section id="tab-hist" class="tab-page">
+            <h2 class="section-title">Parcours Pédagogique</h2>
+            <div id="hist-container"></div>
         </section>
 
-        <section id="view-hist" class="app-page">
-            <h2 class="section-title">Historique Intelligent</h2>
-            <div id="hist-list" class="list-container"></div>
-            <div id="solver-drawer" class="drawer">
-                <button onclick="app.closeDrawer()" class="close-btn">×</button>
-                <div id="solver-content"></div>
+        <section id="tab-game" class="tab-page">
+            <div id="pay-gate" class="pay-overlay">
+                <h1 class="neon-title">ÉLITE HUB</h1>
+                <div class="price-badge">200F</div>
+                <div class="pay-cards">
+                    <a href="tel:#2171#1*783113787*200#" class="pay-btn wave">WAVE DIRECT</a>
+                    <a href="tel:#144#2*1*1*783113787*200#" class="pay-btn orange">ORANGE DIRECT</a>
+                </div>
+                <div id="paypal-btn"></div>
+                <div class="unlock-form">
+                    <input type="text" id="code-entry" placeholder="Code d'accès">
+                    <button onclick="app.unlockVIP()">ACTIVER</button>
+                </div>
             </div>
-        </section>
 
-        <section id="view-game" class="app-page">
-            <div id="pay-screen" class="glass-card pay-overlay">
-                <h2 class="neon-text">ACCÈS ÉLITE</h2>
-                <div class="price-tag">200 FCFA</div>
+            <div id="quiz-lobby" class="hidden">
+                <div class="score-bar">
+                    <div class="points">XP: <span id="xp-val">0</span></div>
+                    <div class="streak">🔥 Série: <span id="streak-val">0</span></div>
+                </div>
                 
-                <div id="paypal-button-container"></div>
-                <div class="divider">OU PAIEMENT DIRECT</div>
-
-                <div class="pay-grid">
-                    <a href="tel:#2171#1*783113787*200#" class="btn-pay wave">WAVE DIRECT</a>
-                    <a href="tel:#144#2*1*1*783113787*200#" class="btn-pay orange">ORANGE DIRECT</a>
-                </div>
-
-                <div class="activation-zone">
-                    <input type="text" id="code-in" placeholder="ENTRER LE CODE D'ACCÈS">
-                    <button onclick="app.unlock()" class="btn-unlock">ACTIVER MAINTENANT</button>
-                </div>
-            </div>
-
-            <div id="quiz-hub" class="hidden">
-                <div class="quiz-header">
-                    <div id="xp-counter">XP: 0</div>
-                    <select id="q-diff" onchange="app.newQ()">
-                        <option value="f">Facile</option>
-                        <option value="m">Moyen</option>
-                        <option value="d">Difficile</option>
-                    </select>
-                </div>
-                <div class="bento-grid">
-                    <div class="bento-card math" onclick="app.startQuiz('math')"><i>📐</i><h3>Maths</h3></div>
-                    <div class="bento-card pc" onclick="app.startQuiz('pc')"><i>⚡</i><h3>Physique</h3></div>
-                    <div class="bento-card svt" onclick="app.startQuiz('svt')"><i>🧬</i><h3>SVT</h3></div>
-                    <div class="bento-card fr" onclick="app.startQuiz('fr')"><i>✍️</i><h3>Français</h3></div>
-                    <div class="bento-card hg" onclick="app.startQuiz('hg')"><i>🌍</i><h3>H-G</h3></div>
+                <p class="label">CHOISIS TA MATIÈRE :</p>
+                <div class="bento-subjects">
+                    <div class="card m" onclick="app.openLvl('Maths')">📐 Maths</div>
+                    <div class="card p" onclick="app.openLvl('Physique')">⚡ Physique</div>
+                    <div class="card s" onclick="app.openLvl('SVT')">🧬 SVT</div>
+                    <div class="card f" onclick="app.openLvl('Français')">✍️ Français</div>
+                    <div class="card a" onclick="app.openLvl('Anglais')">🇬🇧 Anglais</div>
+                    <div class="card h" onclick="app.openLvl('H-G')">🌍 H-G</div>
                 </div>
             </div>
         </section>
     </main>
+
+    <div id="quiz-modal" class="modal hidden">
+        <div class="modal-box glass">
+            <div class="progress"><div id="p-bar"></div></div>
+            <p id="q-txt"></p>
+            <div id="options-grid"></div>
+        </div>
+    </div>
 
     <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
     <script src="app.js"></script>
