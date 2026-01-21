@@ -1,67 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-
 :root {
-    --bg: #020406;
-    --accent: #00f2ff;
-    --glass: rgba(255, 255, 255, 0.04);
-    --gold: #ffbe0b;
+    --bg: #06080b; --accent: #00f2ff; --glass: rgba(255,255,255,0.05);
+    --green: #2ecc71; --yellow: #f1c40f; --red: #e74c3c;
 }
+body { background: var(--bg); color: white; font-family: 'Montserrat', sans-serif; margin: 0; }
 
-* { box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-body { background: var(--bg); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-
-/* Navigation Verticale */
-.side-nav {
-    width: 85px; background: rgba(0,0,0,0.9); display: flex; flex-direction: column;
-    align-items: center; padding: 25px 0; border-right: 1px solid #1a1a1a; z-index: 100;
+/* Navigation Horizontale Supérieure */
+.main-nav {
+    display: flex; justify-content: space-around; background: #000;
+    padding: 15px 0; border-bottom: 1px solid #222; position: fixed; top: 0; width: 100%; z-index: 1000;
 }
-.nav-logo { font-weight: 900; color: var(--accent); font-size: 2rem; margin-bottom: 50px; text-shadow: 0 0 15px var(--accent); }
-.side-nav button {
-    background: none; border: none; font-size: 1.8rem; margin: 25px 0; cursor: pointer; transition: 0.4s; filter: grayscale(1);
+.nav-btn { background: none; border: none; color: #666; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.nav-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+.content { margin-top: 60px; padding: 20px; height: calc(100vh - 60px); overflow-y: auto; }
+.tab-page { display: none; }
+.tab-page.active { display: block; animation: fadeIn 0.4s ease; }
+
+/* Bento Subjects */
+.bento-subjects { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.card {
+    height: 130px; border-radius: 25px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; font-weight: bold; cursor: pointer; transition: 0.3s;
 }
-.side-nav button:hover { filter: grayscale(0); transform: scale(1.3); }
+.card.m { background: linear-gradient(135deg, #00c6fb, #005bea); }
+.card.p { background: linear-gradient(135deg, #667eea, #764ba2); }
+.card:hover { transform: scale(1.02); }
 
-/* Main Area */
-.main-content { flex: 1; padding: 30px; overflow-y: auto; position: relative; }
-.app-page { display: none; max-width: 800px; margin: 0 auto; animation: slideUp 0.5s ease; }
-.app-page.active { display: block; }
+/* Solver Step-by-Step Accordion */
+.step-card { background: var(--glass); margin-bottom: 10px; border-radius: 15px; border: 1px solid #222; }
+.step-head { padding: 15px; cursor: pointer; font-weight: bold; color: var(--accent); }
+.step-body { padding: 15px; display: none; border-top: 1px solid #222; font-size: 0.9rem; }
+.step-body.show { display: block; }
 
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+/* Calculatrice */
+.glass-display { background: #000; padding: 30px; border-radius: 20px; text-align: right; margin-bottom: 20px; }
+#input-val { font-size: 3rem; font-weight: 900; color: var(--accent); }
 
-/* Glass Cards & Bento */
-.glass-card {
-    background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 35px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
-.bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.bento-card, .conv-card {
-    height: 150px; border-radius: 25px; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; cursor: pointer; transition: 0.4s; font-weight: bold;
-}
-.math { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-.pc { background: linear-gradient(135deg, #667eea, #764ba2); }
-.svt { background: linear-gradient(135deg, #b1f4cf, #38ef7d); color: #000; }
-.fr { background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #000; }
-.hg { background: linear-gradient(135deg, #fa709a, #fee140); color: #000; }
+.numpad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.numpad-grid button { padding: 20px; border-radius: 15px; border: none; background: #1a1a1a; color: white; font-weight: bold; }
 
-/* Calculatrice Display */
-.display { background: #000; padding: 40px; border-radius: 25px; text-align: right; margin-bottom: 25px; border: 1px solid #222; }
-#main-res { font-size: 3.5rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px rgba(0,242,255,0.4); }
-
-/* Paiement */
-.price-tag { font-size: 4rem; font-weight: 900; color: var(--gold); text-align: center; margin: 20px 0; text-shadow: 0 0 30px rgba(255,190,11,0.5); }
-.pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
-.btn-pay {
-    text-decoration: none; padding: 20px; border-radius: 20px; text-align: center; 
-    font-weight: 900; color: white; font-size: 0.9rem; transition: 0.3s;
-}
-.wave { background: #1cbcf2; box-shadow: 0 10px 20px rgba(28,188,242,0.3); }
-.orange { background: #ff7900; box-shadow: 0 10px 20px rgba(255,121,0,0.3); }
-
-/* Solver Drawer */
-.drawer {
-    position: fixed; bottom: -100%; left: 0; width: 100%; height: 85%;
-    background: #05070a; border-top: 5px solid var(--accent); padding: 40px;
-    transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); z-index: 2000; overflow-y: auto;
-}
-.drawer.open { bottom: 0; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
