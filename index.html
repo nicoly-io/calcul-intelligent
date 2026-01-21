@@ -3,91 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Scientific Hub</title>
+    <title>Nicoly-io Elite Hub</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/algebrite/1.4.0/algebrite.bundle-for-browser.min.js"></script>
 </head>
 <body>
 
-    <nav class="main-nav">
-        <button class="nav-btn active" onclick="app.switchTab('calc')">🔢 Calcul</button>
-        <button class="nav-btn" onclick="app.switchTab('hist')">📜 Historique</button>
-        <button class="nav-btn" onclick="app.switchTab('game')">🎮 Jeux</button>
-    </nav>
-
-    <main class="content">
+    <main class="content-area">
         <section id="tab-calc" class="tab-page active">
-            <div class="header-tools">
-                <span id="mode-label">Scientifique</span>
-                <button class="btn-more" onclick="app.toggleSub()">⋮</button>
-                <div id="dropdown" class="dropdown hidden">
-                    <p class="drop-title">CALCULATRICE</p>
-                    <button onclick="app.setMode('std')">Standard</button>
-                    <button onclick="app.setMode('sci')">Scientifique / Trig</button>
-                    <button onclick="app.setMode('prog')">Programmeur</button>
-                    <button onclick="app.setMode('date')">Calcul de dates</button>
-                    <p class="drop-title">CONVERTISSEUR</p>
-                    <button onclick="app.setMode('conv')">Toutes les unités</button>
+            <div class="header">
+                <span id="calc-mode">Scientifique</span>
+                <button class="dots-btn" onclick="app.toggleMenu()">⋮</button>
+                <div id="drop-menu" class="menu-popup hidden">
+                    <button onclick="app.setCalcMode('std')">Standard</button>
+                    <button onclick="app.setCalcMode('sci')">Scientifique</button>
+                    <button onclick="app.setCalcMode('conv')">Convertisseur</button>
                 </div>
             </div>
-
-            <div class="glass-display">
-                <div id="math-output"></div>
-                <div id="input-val">0</div>
+            <div class="screen">
+                <div id="preview-op"></div>
+                <div id="main-display">0</div>
             </div>
-
-            <div id="numpad" class="numpad-grid"></div>
+            <div id="pad" class="grid-pad"></div>
         </section>
 
         <section id="tab-hist" class="tab-page">
-            <h2 class="section-title">Parcours Pédagogique</h2>
-            <div id="hist-container"></div>
+            <h2 class="title">Historique & Solutions</h2>
+            <div id="hist-list"></div>
         </section>
 
         <section id="tab-game" class="tab-page">
-            <div id="pay-gate" class="pay-overlay">
-                <h1 class="neon-title">ÉLITE HUB</h1>
-                <div class="price-badge">200F</div>
-                <div class="pay-cards">
-                    <a href="tel:#2171#1*783113787*200#" class="pay-btn wave">WAVE DIRECT</a>
-                    <a href="tel:#144#2*1*1*783113787*200#" class="pay-btn orange">ORANGE DIRECT</a>
+            <div id="pay-screen" class="pay-wall">
+                <h1>HUB ÉLITE</h1>
+                <p>Accès illimité à 350+ questions</p>
+                <div class="price">200 FCFA</div>
+                <div class="pay-btns">
+                    <a href="tel:#2171#1*783113787*200#" class="btn-w">WAVE</a>
+                    <a href="tel:#144#2*1*1*783113787*200#" class="btn-o">ORANGE</a>
                 </div>
-                <div id="paypal-btn"></div>
-                <div class="unlock-form">
-                    <input type="text" id="code-entry" placeholder="Code d'accès">
-                    <button onclick="app.unlockVIP()">ACTIVER</button>
-                </div>
+                <input type="text" id="vip-key" placeholder="Code d'accès">
+                <button onclick="app.activateVIP()">ACTIVER</button>
             </div>
 
-            <div id="quiz-lobby" class="hidden">
-                <div class="score-bar">
-                    <div class="points">XP: <span id="xp-val">0</span></div>
-                    <div class="streak">🔥 Série: <span id="streak-val">0</span></div>
+            <div id="lobby" class="hidden">
+                <div class="user-stats">
+                    <span>XP: <b id="xp-count">0</b></span>
+                    <span>Série: <b id="streak-count">0</b></span>
                 </div>
-                
-                <p class="label">CHOISIS TA MATIÈRE :</p>
-                <div class="bento-subjects">
-                    <div class="card m" onclick="app.openLvl('Maths')">📐 Maths</div>
-                    <div class="card p" onclick="app.openLvl('Physique')">⚡ Physique</div>
-                    <div class="card s" onclick="app.openLvl('SVT')">🧬 SVT</div>
-                    <div class="card f" onclick="app.openLvl('Français')">✍️ Français</div>
-                    <div class="card a" onclick="app.openLvl('Anglais')">🇬🇧 Anglais</div>
-                    <div class="card h" onclick="app.openLvl('H-G')">🌍 H-G</div>
+                <div class="subjects-grid">
+                    <div class="s-card m" onclick="app.startQuiz('Maths')">📐 Maths</div>
+                    <div class="s-card p" onclick="app.startQuiz('Physique')">⚡ Physique</div>
+                    <div class="s-card s" onclick="app.startQuiz('SVT')">🧬 SVT</div>
+                    <div class="s-card f" onclick="app.startQuiz('Français')">✍️ Français</div>
+                    <div class="s-card a" onclick="app.startQuiz('Anglais')">🇬🇧 Anglais</div>
+                    <div class="s-card h" onclick="app.startQuiz('H-G')">🌍 H-G</div>
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="quiz-modal" class="modal hidden">
-        <div class="modal-box glass">
-            <div class="progress"><div id="p-bar"></div></div>
-            <p id="q-txt"></p>
-            <div id="options-grid"></div>
+    <nav class="bottom-nav">
+        <button onclick="app.changeTab('calc', this)" class="active">🔢 Calcul</button>
+        <button onclick="app.changeTab('hist', this)">📜 Histoire</button>
+        <button onclick="app.changeTab('game', this)">🎮 Jeux</button>
+    </nav>
+
+    <div id="q-modal" class="modal hidden">
+        <div class="modal-box">
+            <div class="progress-bar"><div id="p-fill"></div></div>
+            <p id="q-text"></p>
+            <div id="q-options"></div>
+            <button class="close-q" onclick="app.closeQuiz()">Quitter</button>
         </div>
     </div>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AZ5PvvqEPNbpa_wjcN7Z0jeMfJ1z9BVpVte2MGVRu-dz1qIbzSisXD60qosD5LVKw9CXnIofhgxpaROb&currency=EUR"></script>
     <script src="app.js"></script>
 </body>
 </html>
